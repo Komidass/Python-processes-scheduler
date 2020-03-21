@@ -24,6 +24,8 @@ process_file = open(r"/home/tho/PycharmProjects/SJF/processes","r")
 processes_string = process_file.readlines()
 processes_queue = []
 last_appended = 0
+do_flag = 0
+done_flag = 0
 for index in range(len(processes_string)): #looping in the txt file,adding string in a list then splitting the strings then appending objects in a list
     processes_string[index] = processes_string[index].rstrip('\n')
     name,arrival,remaining = processes_string[index].split()
@@ -39,16 +41,25 @@ while(1):
             last_appended = index
             break
     if(len(processes_queue) == 0):
+        if (do_flag == 0):
+            time += 1
+            continue
+        else:
             break
-    processes_queue.sort(key=lambda x: x.remaining)
+    if(done_flag ==1):
+        processes_queue.sort(key=lambda x: x.remaining)
+        done_flag = 0
     if(processes_queue[0].remaining == 0):
+        done_flag = 1
         print("process", processes_queue[0].name, "is done")
         processes_queue.remove(processes_queue[0])
         if(len(processes_queue) != 0):
             processes_queue[0].do_process()
+            do_flag = 1
            # print(time, processes_queue[0].name, " ", end="")
     else:
         processes_queue[0].do_process()
+        do_flag = 1
       #  print(time,processes_queue[0].name," ",end = "")
     time += 1
 
