@@ -26,6 +26,7 @@ processes_queue = []
 last_appended = 0
 do_flag = 0
 done_flag = 0
+preemptive = 0 #1 if preemptive,0 if non preemptive
 for index in range(len(processes_string)): #looping in the txt file,adding string in a list then splitting the strings then appending objects in a list
     processes_string[index] = processes_string[index].rstrip('\n')
     name,arrival,remaining = processes_string[index].split()
@@ -46,7 +47,7 @@ while(1):
             continue
         else:
             break
-    if(done_flag ==1):
+    if((done_flag ==1) or (preemptive)):
         processes_queue.sort(key=lambda x: x.remaining)
         done_flag = 0
     if(processes_queue[0].remaining == 0):
